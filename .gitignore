@@ -46,3 +46,6 @@ logs/
 # Output directory for all CLI outputs (cloned sites, reports, etc.)
 .output/
 
+# Legacy output directories (deprecated, use .output/ instead)
+cloned_site/
+
