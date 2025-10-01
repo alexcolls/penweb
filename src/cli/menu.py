@@ -10,10 +10,13 @@ src_dir = Path(__file__).parent.parent
 if str(src_dir) not in sys.path:
     sys.path.insert(0, str(src_dir))
 
-# Load environment variables for logging
+# Load environment variables
 try:
     from dotenv import load_dotenv
-    load_dotenv()
+    # Load .env from project root
+    project_root = Path(__file__).parent.parent.parent
+    env_path = project_root / ".env"
+    load_dotenv(dotenv_path=env_path)
 except ImportError:
     pass  # dotenv not installed, will use system environment variables
 
@@ -150,13 +153,13 @@ class PentestMenu:
                 # User provided a custom name, use it within OUTPUT_DIR
                 output_dir = str(get_output_dir() / custom_dir)
             else:
-                # Use default from config (always within .output)
-                output_dir = str(default_output)
+                # Use default from config - pass None to let clone service use its default
+                output_dir = None
         except (EOFError, KeyboardInterrupt):
             print("\n\033[93m⚠️  Input cancelled\033[0m")
             return
         
-        output_display = output_dir if output_dir else default_output
+        output_display = output_dir if output_dir else str(default_output)
         logger.info(f"Tool: Clone Website - Target: {url}, Output: {output_display}")
         print(f"\n\033[93m⏳ Cloning website to '{output_display}'...\033[0m\n")
         print("-" * 78)
