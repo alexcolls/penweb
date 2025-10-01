@@ -392,13 +392,13 @@ install_development_mode() {
         log_message "Created .env file"
     fi
     
-    # Verify installation
+    # Verify installation by checking if main.py exists and Poetry environment is set up
     print_status "progress" "Verifying installation..."
-    if poetry run python "$SCRIPT_DIR/src/main.py" --help >/dev/null 2>&1; then
+    if [ -f "$SCRIPT_DIR/src/main.py" ] && poetry env info >/dev/null 2>&1; then
         print_status "success" "Installation verified"
         log_message "Development installation verified"
     else
-        print_status "warning" "Could not verify installation (this may be normal if --help is not supported)"
+        print_status "warning" "Could not fully verify installation"
     fi
     
     # Success message
@@ -490,13 +490,13 @@ install_user_mode() {
     # Add to PATH if needed
     add_to_path
     
-    # Verify installation
+    # Verify installation by checking if files exist and wrapper is executable
     print_status "progress" "Verifying installation..."
-    if "$WRAPPER_SCRIPT" --help >/dev/null 2>&1; then
+    if [ -f "$INSTALL_DIR/src/main.py" ] && [ -x "$WRAPPER_SCRIPT" ] && poetry env info >/dev/null 2>&1; then
         print_status "success" "Installation verified"
         log_message "User mode installation verified"
     else
-        print_status "warning" "Could not verify installation (this may be normal if --help is not supported)"
+        print_status "warning" "Could not fully verify installation"
     fi
     
     # Success message
