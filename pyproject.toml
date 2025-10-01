@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "penweb"
-version = "0.1.0"
+version = "0.2.0"
 description = "Website Penetration Testing Toolkit and Security Testing Suite"
 authors = ["Your Name <you@example.com>"]
 readme = "README.md"
