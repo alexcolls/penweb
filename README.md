@@ -6,6 +6,8 @@ A collection of security testing utilities and AWS Lambda functions for URL moni
 
 This repository contains tools designed for security testing, penetration testing, and monitoring. It includes an AWS Lambda function for URL health checks and utilities for testing rate limiting and authentication mechanisms.
 
+**NEW:** 🎨 **Interactive CLI** - Run all tools through a beautiful, user-friendly command-line interface with ASCII art and interactive menus!
+
 ## Components
 
 ### 📡 AWS Lambda - URL Pinger (`src/lambda/`)
@@ -21,9 +23,9 @@ AWS Lambda function that processes SQS messages containing URLs and pings them v
 
 See [`src/lambda/README.md`](src/lambda/README.md) for detailed documentation and deployment instructions.
 
-### 🔧 Security Testing Utilities (`src/utils/`)
+### 🔧 Security Testing Utilities (`src/services/`)
 
-#### 🔐 Credential Testing (`cred.py`)
+#### 🔐 Credential Testing (`attempt_login.py`)
 
 Tests login form security and rate limiting by attempting credential combinations.
 
@@ -37,7 +39,11 @@ Tests login form security and rate limiting by attempting credential combination
 
 **Usage:**
 ```bash
-poetry run python src/utils/cred.py https://example.com/login
+# Via CLI (Recommended)
+./run.sh  # Then select option 4
+
+# Or directly
+poetry run python src/services/attempt_login.py https://example.com/login
 ```
 
 **Use Cases:**
@@ -46,7 +52,7 @@ poetry run python src/utils/cred.py https://example.com/login
 - Penetration testing authorization flows
 - Security audit compliance validation
 
-#### 🌐 Rate Limit Testing (`ddos.py`)
+#### 🌐 Rate Limit Testing (`d2.py`)
 
 Tests API and web endpoint rate limiting by making repeated requests.
 
@@ -60,7 +66,11 @@ Tests API and web endpoint rate limiting by making repeated requests.
 
 **Usage:**
 ```bash
-poetry run python src/utils/ddos.py https://api.example.com 0.5
+# Via CLI (Recommended)
+./run.sh  # Then select option 3
+
+# Or directly
+poetry run python src/services/d2.py https://api.example.com 0.5
 ```
 
 **Use Cases:**
@@ -80,9 +90,25 @@ Core utility for making HTTP requests and measuring response times.
 - Status code capture
 - Error handling for network issues
 
-#### 📋 Clone Utility (`clone.py`)
+#### 📋 Website Cloning (`clone.py`)
 
-Placeholder utility for future development.
+Downloads website HTML, CSS, and JavaScript files for offline analysis.
+
+**Features:**
+- Downloads HTML, CSS, and JS files
+- Preserves relative links
+- Extracts inline styles and scripts
+- Resource detection and downloading
+- BeautifulSoup HTML parsing
+
+**Usage:**
+```bash
+# Via CLI (Recommended)
+./run.sh  # Then select option 2
+
+# Or directly
+poetry run python src/services/clone.py https://example.com output_dir
+```
 
 ## Project Structure
 
@@ -92,26 +118,37 @@ blue-yellow/
 ├── poetry.lock             # Locked dependency versions
 ├── poetry.toml             # Local Poetry settings
 ├── README.md               # This file
-├── SETUP.md               # Detailed setup instructions
 ├── LICENSE                # License information
+├── run.sh                 # Convenience script to launch CLI
 ├── .env                   # Environment variables (not tracked)
 ├── .env.sample            # Environment variable template
+├── docs/
+│   ├── SETUP.md           # Detailed setup instructions
+│   ├── CLI_USAGE.md       # Interactive CLI usage guide
+│   └── LOGGING.md         # Logging system documentation
 ├── src/
+│   ├── cli/               # Interactive CLI interface
+│   │   ├── banner.py      # ASCII art and branding
+│   │   └── menu.py        # Interactive menu system
 │   ├── lambda/
 │   │   ├── entrypoint.py  # AWS Lambda handler
 │   │   └── README.md      # Lambda documentation
-│   └── utils/
-│       ├── ping.py        # URL ping utility
-│       ├── cred.py        # Credential testing utility
-│       ├── ddos.py        # Rate limit testing utility
-│       └── clone.py       # Clone utility (placeholder)
+│   ├── services/          # Core pentesting services
+│   │   ├── ping.py        # URL ping utility
+│   │   ├── clone.py       # Website cloning utility
+│   │   ├── d2.py          # DDoS/rate limit testing
+│   │   └── attempt_login.py # Login testing utility
+│   ├── utils/             # Helper utilities
+│   │   ├── logger.py      # Logging configuration
+│   │   └── sqs.py         # SQS utilities
+│   └── main.py            # CLI entry point
 └── test/
     └── test_lambda.py     # Lambda function tests
 ```
 
 ## Setup
 
-See [`SETUP.md`](SETUP.md) for detailed setup instructions.
+See [`docs/SETUP.md`](docs/SETUP.md) for detailed setup instructions.
 
 **Quick Start:**
 
@@ -122,18 +159,32 @@ curl -sSL https://install.python-poetry.org | python3 -
 # Install project dependencies
 poetry install --no-root
 
-# Activate the virtual environment
-poetry shell
+# 🚀 Launch the Interactive CLI (Recommended!)
+./run.sh
+# or
+poetry run python src/main.py
 
-# Run Lambda tests
-poetry run python test/test_lambda.py
-
-# Test credential functionality
-poetry run python src/utils/cred.py https://example.com/login
-
-# Test rate limiting
-poetry run python src/utils/ddos.py https://example.com 1.0
+# Alternative: Run tools directly
+poetry run python test/test_lambda.py  # Lambda tests
 ```
+
+### 🎨 Interactive CLI
+
+The easiest way to use Blue-Yellow is through the **interactive CLI**:
+
+```bash
+./run.sh
+```
+
+Features:
+- 🎨 Beautiful ASCII art banner
+- 📋 Interactive menu system
+- ⚖️ Built-in legal warnings and authorization checks
+- 🎯 Guided workflows for each tool
+- 🔴 Clear marking of offensive tools
+- ⌨️ Graceful error handling
+
+See [`docs/CLI_USAGE.md`](docs/CLI_USAGE.md) for detailed usage guide.
 
 ## Dependencies
 
@@ -148,6 +199,14 @@ poetry run python src/utils/ddos.py https://example.com 1.0
 - `black` ^23.7.0 - Code formatting
 - `flake8` ^6.1.0 - Linting
 - `mypy` ^1.5.0 - Type checking
+
+## 📚 Documentation
+
+- 📖 **[Setup Guide](docs/SETUP.md)** - Installation and configuration instructions
+- 🎨 **[CLI Usage Guide](docs/CLI_USAGE.md)** - Interactive CLI documentation and examples
+- 📝 **[Logging Guide](docs/LOGGING.md)** - Logging system overview and usage
+- ⚙️  **[Logging Setup](docs/LOGGING_SETUP.md)** - Advanced logging configuration
+- 🚀 **[Lambda Deployment](src/lambda/README.md)** - AWS Lambda deployment guide
 
 ## Development
 
@@ -172,6 +231,9 @@ poetry run mypy src/
 ```bash
 poetry run pytest test/
 ```
+
+**View logs:**
+See [`docs/LOGGING.md`](docs/LOGGING.md) for logging configuration and usage.
 
 ## Security & Legal Notice
 
