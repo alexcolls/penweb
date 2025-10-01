@@ -1,14 +1,15 @@
 # AWS Lambda - URL Pinger
 
-This Lambda function processes SQS messages containing URLs and pings them via HTTP requests.
+This Lambda function processes SQS messages containing URLs and pings them via HTTP requests. It's designed for monitoring website availability, measuring response times, and validating endpoint health.
 
 ## Features
 
-- Processes SQS events with URLs
+- Processes SQS events with URLs in batch mode
 - Supports both plain URL strings and JSON formatted messages
 - Returns detailed results including response times and status codes
 - Comprehensive error handling and logging
-- No external dependencies (uses standard library only)
+- Modular design with separate utility functions
+- Uses Python standard library (urllib) for HTTP requests
 
 ## SQS Message Format
 
@@ -75,28 +76,93 @@ The Lambda execution role needs:
 
 ## Deployment
 
+### Prerequisites
+
+The Lambda function requires these files:
+- `src/lambda/entrypoint.py` - Main Lambda handler
+- `src/utils/ping.py` - URL ping utility
+
 ### Option 1: AWS Console
 
-1. Zip the `lambda.py` file
-2. Upload to AWS Lambda via the console
-3. Set handler to `lambda.lambda_handler`
+1. Create a deployment package:
+   ```bash
+   cd /home/kali/labs/blue-yellow
+   mkdir -p lambda-package/utils
+   cp src/lambda/entrypoint.py lambda-package/
+   cp src/utils/ping.py lambda-package/utils/
+   cd lambda-package
+   zip -r ../lambda-function.zip .
+   cd ..
+   rm -rf lambda-package
+   ```
+
+2. Upload `lambda-function.zip` to AWS Lambda via the console
+3. Set handler to `entrypoint.lambda_handler`
+4. Configure runtime as Python 3.9 or later
 
 ### Option 2: AWS CLI
 
 ```bash
-zip function.zip lambda.py
+# Create deployment package
+cd /home/kali/labs/blue-yellow
+mkdir -p lambda-package/utils
+cp src/lambda/entrypoint.py lambda-package/
+cp src/utils/ping.py lambda-package/utils/
+cd lambda-package
+zip -r ../lambda-function.zip .
+cd ..
+
+# Deploy to AWS
 aws lambda create-function \
   --function-name url-pinger \
   --runtime python3.9 \
   --role arn:aws:iam::YOUR_ACCOUNT:role/YOUR_ROLE \
-  --handler lambda.lambda_handler \
-  --zip-file fileb://function.zip \
-  --timeout 30
+  --handler entrypoint.lambda_handler \
+  --zip-file fileb://lambda-function.zip \
+  --timeout 30 \
+  --memory-size 128
+
+# Clean up
+rm -rf lambda-package
 ```
 
 ### Option 3: Infrastructure as Code
 
 Use AWS SAM, Terraform, or CloudFormation to deploy.
+
+**Example Terraform:**
+```hcl
+resource "aws_lambda_function" "url_pinger" {
+  filename      = "lambda-function.zip"
+  function_name = "url-pinger"
+  role          = aws_iam_role.lambda_role.arn
+  handler       = "entrypoint.lambda_handler"
+  runtime       = "python3.9"
+  timeout       = 30
+  memory_size   = 128
+}
+```
+
+**Example AWS SAM template.yaml:**
+```yaml
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  UrlPingerFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: entrypoint.lambda_handler
+      Runtime: python3.9
+      CodeUri: lambda-package/
+      Timeout: 30
+      MemorySize: 128
+      Events:
+        SQSEvent:
+          Type: SQS
+          Properties:
+            Queue: !GetAtt UrlQueue.Arn
+            BatchSize: 10
+```
 
 ## Response Format
 
@@ -147,8 +213,21 @@ The Lambda returns a dictionary with processing results:
 
 ### Local Testing
 
+Run the included test suite:
+
+```bash
+# From project root
+cd /home/kali/labs/blue-yellow
+poetry run python test/test_lambda.py
+```
+
+Or test manually in Python:
+
 ```python
-from lambda import lambda_handler
+import sys
+sys.path.insert(0, '/home/kali/labs/blue-yellow/src')
+
+from lambda.entrypoint import lambda_handler
 
 # Test event
 event = {
@@ -162,6 +241,22 @@ event = {
 
 result = lambda_handler(event, None)
 print(result)
+```
+
+### Unit Tests
+
+The project includes comprehensive unit tests in `test/test_lambda.py`:
+
+- ✓ Single plain URL
+- ✓ JSON format URL
+- ✓ Multiple URLs in batch
+- ✓ Invalid URL handling
+- ✓ Unreachable URL handling
+- ✓ Mixed success and failure scenarios
+
+Run tests:
+```bash
+poetry run python test/test_lambda.py
 ```
 
 ## Monitoring
