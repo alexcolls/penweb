@@ -43,3 +43,6 @@ Thumbs.db
 *.log
 logs/
 
+# Output directory for all CLI outputs (cloned sites, reports, etc.)
+.output/
+
