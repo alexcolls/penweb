@@ -26,9 +26,8 @@ def get_output_dir() -> Path:
     # Make it absolute if it's relative
     path = Path(output_dir)
     if not path.is_absolute():
-        # Resolve relative to project root
-        project_root = Path(__file__).parent.parent.parent
-        path = project_root / output_dir
+        # Resolve relative to current working directory (where user runs the command)
+        path = Path.cwd() / output_dir
     
     return path
 
