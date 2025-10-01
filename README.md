@@ -202,11 +202,11 @@ See [`docs/CLI_USAGE.md`](docs/CLI_USAGE.md) for detailed usage guide.
 
 ## 📚 Documentation
 
-- 📖 **[Setup Guide](docs/SETUP.md)** - Installation and configuration instructions
+- 📖 **[Setup Guide](docs/CLI_SETUP.md)** - Installation and configuration instructions
 - 🎨 **[CLI Usage Guide](docs/CLI_USAGE.md)** - Interactive CLI documentation and examples
 - 📝 **[Logging Guide](docs/LOGGING.md)** - Logging system overview and usage
 - ⚙️  **[Logging Setup](docs/LOGGING_SETUP.md)** - Advanced logging configuration
-- 🚀 **[Lambda Deployment](src/lambda/README.md)** - AWS Lambda deployment guide
+- 🚀 **[Lambda Deployment](docs/LAMBDA.md)** - AWS Lambda deployment guide
 
 ## Development
 
