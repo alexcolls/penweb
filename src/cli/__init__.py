@@ -1,2 +1,2 @@
-"""CLI module for blue-yellow pentesting utilities."""
+"""CLI module for penweb utilities."""
 

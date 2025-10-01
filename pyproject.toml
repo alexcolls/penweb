@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "blue-yellow"
+name = "penweb"
 version = "0.1.0"
-description = "AWS Lambda URL Pinger and other utilities"
+description = "Website Penetration Testing Toolkit and Security Testing Suite"
 authors = ["Your Name <you@example.com>"]
 readme = "README.md"
 

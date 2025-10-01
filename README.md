@@ -205,7 +205,7 @@ poetry run python test/test_lambda.py  # Lambda tests
 
 ### 🎨 Interactive CLI
 
-The easiest way to use Blue-Yellow is through the **interactive CLI**:
+The easiest way to use PenWeb is through the **interactive CLI**:
 
 ```bash
 ./run.sh

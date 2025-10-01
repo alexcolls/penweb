@@ -1,4 +1,4 @@
-"""Main entry point for blue-yellow utilities."""
+"""Main entry point for penweb utilities."""
 import sys
 from pathlib import Path
 

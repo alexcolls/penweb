@@ -25,7 +25,7 @@ from services.attempt_login import attempt_credential_combinations
 from utils.logger import setup_logging, get_logger
 
 # Set up logging
-logger = setup_logging('blue-yellow')
+logger = setup_logging('penweb')
 
 
 class PentestMenu:
@@ -336,7 +336,7 @@ class PentestMenu:
                 self.running = False
                 clear_screen()
                 print("\n\033[92m" + "=" * 78 + "\033[0m")
-                print("\033[92m                    Thank you for using Blue-Yellow!\033[0m")
+                print("\033[92m                    Thank you for using PenWeb!\033[0m")
                 print("\033[92m                         Stay safe. Stay legal.\033[0m")
                 print("\033[92m" + "=" * 78 + "\033[0m\n")
             else:
@@ -347,10 +347,10 @@ class PentestMenu:
 def start_cli():
     """Start the CLI application."""
     try:
-        logger.info("Blue-Yellow CLI started")
+        logger.info("PenWeb CLI started")
         menu = PentestMenu()
         menu.run()
-        logger.info("Blue-Yellow CLI exited normally")
+        logger.info("PenWeb CLI exited normally")
     except KeyboardInterrupt:
         logger.warning("Application interrupted by user")
         print("\n\n\033[93m⚠️  Application interrupted by user\033[0m")
