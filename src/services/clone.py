@@ -11,11 +11,20 @@ import requests
 from bs4 import BeautifulSoup
 
 try:
-    from utils.config import get_clone_output_dir
+    from utils.config import get_clone_output_dir, get_output_dir
 except ImportError:
     # Fallback if config not available
+    def get_output_dir():
+        """Get the output directory (fallback to .output)."""
+        return Path(".output")
+    
     def get_clone_output_dir(subdirectory=None):
-        return Path(subdirectory if subdirectory else "cloned_site")
+        """Get the clone output directory (fallback to .output/cloned_site)."""
+        output_dir = get_output_dir()
+        if subdirectory:
+            return output_dir / subdirectory
+        else:
+            return output_dir / "cloned_site"
 
 
 class WebCloner:

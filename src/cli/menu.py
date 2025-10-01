@@ -150,8 +150,8 @@ class PentestMenu:
                 # User provided a custom name, use it within OUTPUT_DIR
                 output_dir = str(get_output_dir() / custom_dir)
             else:
-                # Use default from config
-                output_dir = None
+                # Use default from config (always within .output)
+                output_dir = str(default_output)
         except (EOFError, KeyboardInterrupt):
             print("\n\033[93m⚠️  Input cancelled\033[0m")
             return
