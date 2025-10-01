@@ -114,12 +114,13 @@ poetry run python src/services/clone.py https://example.com output_dir
 
 ```
 penweb/
+├── install.sh             # Automated installation script (Linux/macOS)
+├── run.sh                 # Convenience script to launch CLI
 ├── pyproject.toml          # Poetry configuration and dependencies
 ├── poetry.lock             # Locked dependency versions
 ├── poetry.toml             # Local Poetry settings
 ├── README.md               # This file
 ├── LICENSE                # License information
-├── run.sh                 # Convenience script to launch CLI
 ├── .env                   # Environment variables (not tracked)
 ├── .env.sample            # Environment variable template
 ├── docs/
@@ -148,9 +149,43 @@ penweb/
 
 ## Setup
 
-See [`docs/SETUP.md`](docs/SETUP.md) for detailed setup instructions.
+### 🚀 Automated Installation (Recommended)
 
-**Quick Start:**
+The easiest way to get started is using our automated installer that handles all dependencies:
+
+```bash
+# Run the installer
+./install.sh
+```
+
+The installer will:
+- ✅ Detect your OS (Linux/macOS) and shell (bash/zsh)
+- ✅ Install all required dependencies (Python 3.9+, Poetry, etc.)
+- ✅ Offer two installation modes:
+  - **Development Mode**: Install in current directory with `.venv` for development
+  - **User/System Mode**: Install to `~/.local/share/penweb` with system-wide `penweb` command
+- ✅ Configure environment files automatically
+- ✅ Works on virgin Linux and macOS machines
+
+**Installation Modes:**
+
+1. **Development Mode** - For contributors and developers:
+   ```bash
+   ./install.sh  # Select option 1
+   ./run.sh      # Run the application
+   ```
+
+2. **User/System Mode** - For end-users:
+   ```bash
+   ./install.sh  # Select option 2
+   penweb        # Run from anywhere (after restarting terminal)
+   ```
+
+### 📖 Manual Installation
+
+See [`docs/SETUP.md`](docs/SETUP.md) for detailed manual setup instructions.
+
+**Quick Start (Manual):**
 
 ```bash
 # Install Poetry if not already installed
@@ -159,7 +194,7 @@ curl -sSL https://install.python-poetry.org | python3 -
 # Install project dependencies
 poetry install --no-root
 
-# 🚀 Launch the Interactive CLI (Recommended!)
+# 🚀 Launch the Interactive CLI
 ./run.sh
 # or
 poetry run python src/main.py
