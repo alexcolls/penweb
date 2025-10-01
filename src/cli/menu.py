@@ -23,6 +23,7 @@ from services.clone import clone_website
 from services.d2 import make_requests_until_blocked
 from services.attempt_login import attempt_credential_combinations
 from utils.logger import setup_logging, get_logger
+from utils.config import get_output_dir, get_clone_output_dir
 
 # Set up logging
 logger = setup_logging('penweb')
@@ -141,25 +142,32 @@ class PentestMenu:
             return
         
         # Get output directory
+        default_output = get_clone_output_dir()
         try:
-            output_dir = input("\n\033[96mOutput directory (default: cloned_site): \033[0m").strip()
-            if not output_dir:
-                output_dir = "cloned_site"
+            print(f"\n\033[90mDefault output directory: {default_output}\033[0m")
+            custom_dir = input("\033[96mCustom subdirectory name (press Enter for default): \033[0m").strip()
+            if custom_dir:
+                # User provided a custom name, use it within OUTPUT_DIR
+                output_dir = str(get_output_dir() / custom_dir)
+            else:
+                # Use default from config
+                output_dir = None
         except (EOFError, KeyboardInterrupt):
             print("\n\033[93m⚠️  Input cancelled\033[0m")
             return
         
-        logger.info(f"Tool: Clone Website - Target: {url}, Output: {output_dir}")
-        print(f"\n\033[93m⏳ Cloning website to '{output_dir}'...\033[0m\n")
+        output_display = output_dir if output_dir else default_output
+        logger.info(f"Tool: Clone Website - Target: {url}, Output: {output_display}")
+        print(f"\n\033[93m⏳ Cloning website to '{output_display}'...\033[0m\n")
         print("-" * 78)
         
         try:
             success = clone_website(url, output_dir)
             
             if success:
-                logger.info(f"Clone successful - URL: {url}, Output: {output_dir}")
+                logger.info(f"Clone successful - URL: {url}, Output: {output_display}")
                 print("\n" + "=" * 78)
-                print(f"\n\033[92m✓ Website cloned successfully to: {output_dir}/\033[0m")
+                print(f"\n\033[92m✓ Website cloned successfully to: {output_display}/\033[0m")
                 print()
             else:
                 logger.warning(f"Clone failed - URL: {url}")

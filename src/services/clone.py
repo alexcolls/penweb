@@ -10,20 +10,30 @@ from urllib.parse import urljoin, urlparse, unquote
 import requests
 from bs4 import BeautifulSoup
 
+try:
+    from utils.config import get_clone_output_dir
+except ImportError:
+    # Fallback if config not available
+    def get_clone_output_dir(subdirectory=None):
+        return Path(subdirectory if subdirectory else "cloned_site")
+
 
 class WebCloner:
     """Clone a website by downloading HTML, CSS, and JS files."""
 
-    def __init__(self, url: str, output_dir: str = "cloned_site"):
+    def __init__(self, url: str, output_dir: Optional[str] = None):
         """
         Initialize the WebCloner.
 
         Args:
             url: The URL to clone
-            output_dir: Directory where files will be saved
+            output_dir: Directory where files will be saved (default: from OUTPUT_DIR env variable)
         """
         self.url = url
-        self.output_dir = Path(output_dir)
+        if output_dir:
+            self.output_dir = Path(output_dir)
+        else:
+            self.output_dir = get_clone_output_dir()
         self.downloaded_files: Set[str] = set()
         self.session = requests.Session()
         self.session.headers.update({
@@ -243,19 +253,20 @@ class WebCloner:
         file_path.write_bytes(content)
 
 
-def clone_website(url: str, output_dir: str = "cloned_site") -> bool:
+def clone_website(url: str, output_dir: Optional[str] = None) -> bool:
     """
     Clone a website by downloading its HTML, CSS, and JS files.
 
     Args:
         url: The URL of the website to clone
-        output_dir: Directory where files will be saved (default: "cloned_site")
+        output_dir: Directory where files will be saved (default: from OUTPUT_DIR env variable)
 
     Returns:
         bool: True if successful, False otherwise
 
     Example:
-        >>> clone_website("https://example.com", "example_clone")
+        >>> clone_website("https://example.com", "custom_dir")
+        >>> clone_website("https://example.com")  # Uses OUTPUT_DIR from .env
     """
     cloner = WebCloner(url, output_dir)
     return cloner.clone()
@@ -268,10 +279,11 @@ def main():
     if len(sys.argv) < 2:
         print("Usage: python clone.py <url> [output_dir]")
         print("Example: python clone.py https://example.com my_clone")
+        print("If output_dir is not provided, uses OUTPUT_DIR from .env")
         sys.exit(1)
     
     url = sys.argv[1]
-    output_dir = sys.argv[2] if len(sys.argv) > 2 else "cloned_site"
+    output_dir = sys.argv[2] if len(sys.argv) > 2 else None
     
     success = clone_website(url, output_dir)
     sys.exit(0 if success else 1)
