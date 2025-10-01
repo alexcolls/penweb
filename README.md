@@ -1,4 +1,4 @@
-# blue-yellow
+# Penweb CLI
 
 A collection of security testing utilities and AWS Lambda functions for URL monitoring and rate limit testing.
 
@@ -113,7 +113,7 @@ poetry run python src/services/clone.py https://example.com output_dir
 ## Project Structure
 
 ```
-blue-yellow/
+penweb/
 ├── pyproject.toml          # Poetry configuration and dependencies
 ├── poetry.lock             # Locked dependency versions
 ├── poetry.toml             # Local Poetry settings
