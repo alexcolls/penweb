@@ -267,9 +267,131 @@ Monitor the Lambda function using:
 - CloudWatch Metrics for invocation counts and errors
 - X-Ray for distributed tracing (if enabled)
 
+## Architecture
+
+```
+┌─────────────────┐
+│   SQS Queue     │
+│  (URL Messages) │
+└────────┬────────┘
+         │ Triggers
+         ▼
+┌─────────────────┐
+│  Lambda Handler │
+│ (entrypoint.py) │
+└────────┬────────┘
+         │ Uses
+         ▼
+┌─────────────────┐      ┌──────────────┐
+│  Ping Utility   │─────▶│  Target URL  │
+│   (ping.py)     │      │  (Internet)  │
+└─────────────────┘      └──────────────┘
+         │
+         ▼
+┌─────────────────┐
+│  CloudWatch     │
+│  Logs/Metrics   │
+└─────────────────┘
+```
+
+## Implementation Details
+
+### File Structure
+- **entrypoint.py**: Main Lambda handler that processes SQS events
+- **utils/ping.py**: Core HTTP request functionality with timing
+
+### Flow
+1. Lambda receives SQS event with one or more messages
+2. Each message body is parsed (plain URL or JSON)
+3. URLs are validated (must start with http:// or https://)
+4. `ping_url()` utility makes HTTP GET request
+5. Response times and status codes are captured
+6. Results aggregated and returned with summary
+
+### Error Handling
+- URL validation errors
+- HTTP errors (4xx, 5xx)
+- Network errors (DNS, connection failures)
+- Timeouts (10-second default)
+- Malformed JSON in message body
+
+All errors are caught, logged, and included in the `failed_pings` array.
+
+## Performance Considerations
+
+- **Memory**: 128 MB is sufficient for basic URL pinging
+- **Timeout**: 30 seconds recommended for Lambda timeout
+- **Batch Size**: 10 messages per batch is a good starting point
+- **Concurrency**: Each URL is pinged sequentially within a Lambda invocation
+- **Cold Start**: ~100-200ms for Python 3.9 runtime
+
+## Cost Optimization
+
+- Uses Python standard library (no external dependencies to install)
+- Minimal memory footprint
+- Short execution time (typically < 5 seconds for 10 URLs)
+- No additional AWS service costs (except SQS)
+
+## Monitoring Best Practices
+
+1. **CloudWatch Alarms**: Set up alarms for:
+   - Lambda errors
+   - Lambda throttling
+   - High duration/timeout
+   - Failed message processing
+
+2. **Custom Metrics**: Extract from Lambda logs:
+   - Average response times per URL
+   - Success/failure ratios
+   - Status code distributions
+
+3. **Dashboard**: Create CloudWatch dashboard showing:
+   - Invocation count
+   - Error rate
+   - Average duration
+   - SQS queue depth
+
+## Troubleshooting
+
+### Common Issues
+
+**Problem**: Lambda times out
+- **Solution**: Reduce SQS batch size or increase Lambda timeout
+
+**Problem**: URLs not being pinged
+- **Solution**: Check URL format (must include http:// or https://)
+
+**Problem**: Import errors in Lambda
+- **Solution**: Ensure deployment package includes both `entrypoint.py` and `utils/ping.py`
+
+**Problem**: High latency
+- **Solution**: Check target URL response times; consider adding retry logic
+
 ## Notes
 
-- The function uses a 10-second timeout for each URL ping
+- The function uses a 10-second timeout for each URL ping request
 - HTTP and HTTPS URLs are supported
-- The function validates URLs before attempting to ping them
+- URLs are validated before attempting to ping them
 - Both successful and failed pings are logged and returned in the response
+- The function returns status code 200 for all successes, 207 (Multi-Status) for partial failures
+- User-Agent header is set to "AWS-Lambda-URL-Pinger/1.0"
+
+## Security Considerations
+
+- Lambda execution role should follow least privilege principle
+- Consider using VPC configuration if pinging internal resources
+- Be cautious with URLs from untrusted sources
+- Implement rate limiting on the SQS queue if needed
+- Review CloudWatch logs regularly for suspicious activity
+
+## Future Enhancements
+
+Potential improvements:
+- [ ] Add retry logic for failed requests
+- [ ] Support for POST/PUT/DELETE methods
+- [ ] Custom headers in SQS message
+- [ ] Response body validation/pattern matching
+- [ ] DynamoDB storage for historical data
+- [ ] SNS notifications for failures
+- [ ] Parallel URL pinging within single invocation
+- [ ] Support for authentication (API keys, OAuth)

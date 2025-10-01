@@ -33,13 +33,21 @@ pip install poetry
 3. **Run tests:**
 
    ```bash
-   # Using poetry
-   cd src/d2
-   poetry run python test_lambda.py
+   # Using poetry (from project root)
+   poetry run python test/test_lambda.py
 
    # Or inside poetry shell
-   cd src/d2
-   python test_lambda.py
+   python test/test_lambda.py
+   ```
+
+4. **Try the utilities:**
+
+   ```bash
+   # Test credential combinations (educational/testing only)
+   poetry run python src/utils/cred.py https://example.com/login
+   
+   # Test rate limiting
+   poetry run python src/utils/ddos.py https://api.example.com 1.0
    ```
 
 ### Managing Dependencies
@@ -81,19 +89,31 @@ The project includes these dev tools:
 **Format code:**
 
 ```bash
-poetry run black src/
+poetry run black src/ test/
 ```
 
 **Lint code:**
 
 ```bash
-poetry run flake8 src/
+poetry run flake8 src/ test/
 ```
 
 **Type check:**
 
 ```bash
-poetry run mypy src/
+poetry run mypy src/ test/
+```
+
+**Run all tests:**
+
+```bash
+poetry run pytest test/ -v
+```
+
+**Run tests with coverage:**
+
+```bash
+poetry run pytest test/ --cov=src --cov-report=html
 ```
 
 ## Project Structure
@@ -105,12 +125,21 @@ blue-yellow/
 ├── poetry.lock             # Locked dependencies (generated)
 ├── README.md               # Main project README
 ├── SETUP.md               # This file
+├── LICENSE                # License information
+├── .env                   # Environment variables (not tracked)
+├── .env.sample            # Environment variable template
 ├── .gitignore             # Git ignore rules
-└── src/
-    └── d2/
-        ├── lambda.py      # AWS Lambda function
-        ├── test_lambda.py # Test script
-        └── README.md      # Lambda documentation
+├── src/
+│   ├── lambda/
+│   │   ├── entrypoint.py  # AWS Lambda function
+│   │   └── README.md      # Lambda documentation
+│   └── utils/
+│       ├── ping.py        # URL ping utility
+│       ├── cred.py        # Credential testing utility
+│       ├── ddos.py        # Rate limit testing utility
+│       └── clone.py       # Clone utility (placeholder)
+└── test/
+    └── test_lambda.py     # Lambda function tests
 ```
 
 ## Quick Start
@@ -120,14 +149,118 @@ blue-yellow/
 curl -sSL https://install.python-poetry.org | python3 -
 
 # Install project dependencies
-cd /home/quantium/labs/blue-yellow
+cd /home/kali/labs/blue-yellow
 poetry install --no-root
 
-# Run tests
-cd src/d2
-poetry run python test_lambda.py
+# Run Lambda tests
+poetry run python test/test_lambda.py
+
+# Test security utilities
+poetry run python src/utils/cred.py https://example.com/login
+poetry run python src/utils/ddos.py https://example.com 1.0
 ```
 
 ## AWS Lambda Deployment
 
-See `src/d2/README.md` for Lambda-specific deployment instructions.
+See `src/lambda/README.md` for Lambda-specific deployment instructions.
+
+### Quick Deployment Package
+
+```bash
+# Create deployment package
+mkdir -p lambda-package/utils
+cp src/lambda/entrypoint.py lambda-package/
+cp src/utils/ping.py lambda-package/utils/
+cd lambda-package
+zip -r ../lambda-function.zip .
+cd ..
+rm -rf lambda-package
+
+# Now upload lambda-function.zip to AWS Lambda
+```
+
+## Security Utilities Usage
+
+### Credential Testing Tool
+
+Tests login forms for rate limiting and security mechanisms:
+
+```bash
+poetry run python src/utils/cred.py <login_url>
+
+# Example with verbose output
+poetry run python src/utils/cred.py https://example.com/login
+```
+
+**Important**: Only use on systems you own or have permission to test.
+
+### Rate Limit Testing Tool
+
+Tests API endpoints for rate limiting:
+
+```bash
+poetry run python src/utils/ddos.py <url> [period_seconds]
+
+# Example: Test with 0.5 second intervals
+poetry run python src/utils/ddos.py https://api.example.com 0.5
+```
+
+## Environment Variables
+
+Copy `.env.sample` to `.env` and configure as needed:
+
+```bash
+cp .env.sample .env
+# Edit .env with your settings
+```
+
+## Troubleshooting
+
+### Poetry Installation Issues
+
+If Poetry installation fails:
+
+```bash
+# Try pip installation
+pip install --user poetry
+
+# Or use pipx (recommended)
+python3 -m pip install --user pipx
+python3 -m pipx ensurepath
+pipx install poetry
+```
+
+### Import Errors
+
+If you get import errors when running scripts:
+
+```bash
+# Make sure you're in the project root
+cd /home/kali/labs/blue-yellow
+
+# Activate the virtual environment
+poetry shell
+
+# Or use poetry run
+poetry run python test/test_lambda.py
+```
+
+### Dependency Issues
+
+If dependencies are out of sync:
+
+```bash
+# Remove lock file and reinstall
+rm poetry.lock
+poetry install
+
+# Or update all dependencies
+poetry update
+```
+
+## Additional Resources
+
+- [Poetry Documentation](https://python-poetry.org/docs/)
+- [AWS Lambda Python Runtime](https://docs.aws.amazon.com/lambda/latest/dg/lambda-python.html)
+- [AWS SQS Documentation](https://docs.aws.amazon.com/sqs/)
+- [Python Type Hints](https://docs.python.org/3/library/typing.html)
