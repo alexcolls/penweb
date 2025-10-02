@@ -1,4 +1,4 @@
-# Penweb CLI
+# 💻 Penweb CLI
 
 A comprehensive security testing toolkit with integrated CLI utilities for penetration testing, privacy tools, and AWS Lambda functions for URL monitoring.
 
