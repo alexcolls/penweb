@@ -2,6 +2,7 @@
 
 import sys
 import os
+import subprocess
 from pathlib import Path
 from typing import Optional, List
 
@@ -44,19 +45,22 @@ class PentestMenu:
         print("\n" + "=" * 78)
         print("                          MAIN MENU - Select a Tool")
         print("=" * 78 + "\n")
-        print("  \033[92m[1]\033[0m 🌐 Ping URL             - Test URL availability and response time")
-        print("  \033[92m[2]\033[0m 📋 Clone Website        - Download website HTML, CSS, and JS files")
-        print("  \033[91m[3]\033[0m 💥 DDoS Test (OFFENSIVE) - Test rate limiting with repeated requests")
-        print("  \033[91m[4]\033[0m 🔐 Login Test (OFFENSIVE) - Test login security with credential combinations")
+        print("  \033[96m[1]\033[0m 🛰️  GPS                 - Device location tracker (multi-provider)")
+        print("  \033[96m[2]\033[0m 🔐 VPN                 - Multi-provider VPN manager")
+        print("  \033[96m[3]\033[0m 📧 Email               - Temporary email address manager")
+        print("  \033[92m[4]\033[0m 🌐 Ping                - Test URL availability and response time")
+        print("  \033[92m[5]\033[0m 📋 Clone               - Download website HTML, CSS, and JS files")
+        print("  \033[91m[6]\033[0m 💥 DDoS (OFFENSIVE)    - Test rate limiting with repeated requests")
+        print("  \033[91m[7]\033[0m 🔐 Login (OFFENSIVE)   - Test login security with credentials")
         print()
-        print("  \033[93m[0]\033[0m 🚪 Exit                 - Quit the application")
+        print("  \033[93m[0]\033[0m 🚪 Exit                - Quit the application")
         print()
         print("=" * 78)
 
     def get_choice(self) -> str:
         """Get user's menu choice."""
         try:
-            choice = input("\n\033[96mSelect an option [0-4]: \033[0m").strip()
+            choice = input("\n\033[96mSelect an option [0-7]: \033[0m").strip()
             return choice
         except (EOFError, KeyboardInterrupt):
             print("\n\n\033[93m⚠️  Interrupted by user\033[0m")
@@ -96,6 +100,138 @@ class PentestMenu:
             input("\n\033[90mPress Enter to continue...\033[0m")
         except (EOFError, KeyboardInterrupt):
             pass
+
+    # ==================== TOOL 1: GPS CLI ====================
+    def tool_gps(self):
+        """Execute the GPS CLI tool from git submodule."""
+        clear_screen()
+        print("\n" + "=" * 78)
+        print("                     🛰️  GPS CLI - Device Location Tracker")
+        print("=" * 78)
+        print("\n\033[96mLaunching GPS CLI...\033[0m\n")
+        
+        # Get path to GPS CLI script
+        project_root = Path(__file__).parent.parent.parent
+        gps_script = project_root / "modules" / "gps-cli" / "gps"
+        
+        if not gps_script.exists():
+            print(f"\n\033[91m✗ Error: GPS CLI not found at {gps_script}\033[0m")
+            print("\033[93m⚠️  Make sure git submodules are initialized:\033[0m")
+            print("    git submodule update --init --recursive\n")
+            self.pause()
+            return
+        
+        logger.info("Tool: GPS CLI launched")
+        
+        try:
+            # Execute GPS CLI in interactive mode
+            result = subprocess.run(
+                [str(gps_script)],
+                cwd=str(gps_script.parent),
+                check=False
+            )
+            
+            if result.returncode == 0:
+                logger.info("GPS CLI exited successfully")
+            else:
+                logger.warning(f"GPS CLI exited with code {result.returncode}")
+                
+        except KeyboardInterrupt:
+            print("\n\033[93m⚠️  GPS CLI interrupted\033[0m")
+            logger.info("GPS CLI interrupted by user")
+        except Exception as e:
+            logger.error(f"GPS CLI error: {str(e)}")
+            print(f"\n\033[91m✗ Error: {str(e)}\033[0m")
+        
+        self.pause()
+
+    # ==================== TOOL 2: VPN CLI ====================
+    def tool_vpn(self):
+        """Execute the VPN CLI tool from git submodule."""
+        clear_screen()
+        print("\n" + "=" * 78)
+        print("                      🔐 VPN CLI - Multi-Provider VPN Manager")
+        print("=" * 78)
+        print("\n\033[96mLaunching VPN CLI...\033[0m\n")
+        
+        # Get path to VPN CLI script
+        project_root = Path(__file__).parent.parent.parent
+        vpn_script = project_root / "modules" / "vpn-cli" / "vpn"
+        
+        if not vpn_script.exists():
+            print(f"\n\033[91m✗ Error: VPN CLI not found at {vpn_script}\033[0m")
+            print("\033[93m⚠️  Make sure git submodules are initialized:\033[0m")
+            print("    git submodule update --init --recursive\n")
+            self.pause()
+            return
+        
+        logger.info("Tool: VPN CLI launched")
+        
+        try:
+            # Execute VPN CLI in interactive mode
+            result = subprocess.run(
+                [str(vpn_script)],
+                cwd=str(vpn_script.parent),
+                check=False
+            )
+            
+            if result.returncode == 0:
+                logger.info("VPN CLI exited successfully")
+            else:
+                logger.warning(f"VPN CLI exited with code {result.returncode}")
+                
+        except KeyboardInterrupt:
+            print("\n\033[93m⚠️  VPN CLI interrupted\033[0m")
+            logger.info("VPN CLI interrupted by user")
+        except Exception as e:
+            logger.error(f"VPN CLI error: {str(e)}")
+            print(f"\n\033[91m✗ Error: {str(e)}\033[0m")
+        
+        self.pause()
+
+    # ==================== TOOL 3: EMAIL CLI ====================
+    def tool_email(self):
+        """Execute the Email CLI tool from git submodule."""
+        clear_screen()
+        print("\n" + "=" * 78)
+        print("                    📧 Email CLI - Temporary Email Manager")
+        print("=" * 78)
+        print("\n\033[96mLaunching Email CLI...\033[0m\n")
+        
+        # Get path to Email CLI script
+        project_root = Path(__file__).parent.parent.parent
+        email_script = project_root / "modules" / "email-cli" / "email"
+        
+        if not email_script.exists():
+            print(f"\n\033[91m✗ Error: Email CLI not found at {email_script}\033[0m")
+            print("\033[93m⚠️  Make sure git submodules are initialized:\033[0m")
+            print("    git submodule update --init --recursive\n")
+            self.pause()
+            return
+        
+        logger.info("Tool: Email CLI launched")
+        
+        try:
+            # Execute Email CLI in interactive mode
+            result = subprocess.run(
+                [str(email_script)],
+                cwd=str(email_script.parent),
+                check=False
+            )
+            
+            if result.returncode == 0:
+                logger.info("Email CLI exited successfully")
+            else:
+                logger.warning(f"Email CLI exited with code {result.returncode}")
+                
+        except KeyboardInterrupt:
+            print("\n\033[93m⚠️  Email CLI interrupted\033[0m")
+            logger.info("Email CLI interrupted by user")
+        except Exception as e:
+            logger.error(f"Email CLI error: {str(e)}")
+            print(f"\n\033[91m✗ Error: {str(e)}\033[0m")
+        
+        self.pause()
 
     # ==================== TOOL 1: PING URL ====================
     def tool_ping(self):
@@ -336,12 +472,18 @@ class PentestMenu:
             choice = self.get_choice()
             
             if choice == "1":
-                self.tool_ping()
+                self.tool_gps()
             elif choice == "2":
-                self.tool_clone()
+                self.tool_vpn()
             elif choice == "3":
-                self.tool_ddos()
+                self.tool_email()
             elif choice == "4":
+                self.tool_ping()
+            elif choice == "5":
+                self.tool_clone()
+            elif choice == "6":
+                self.tool_ddos()
+            elif choice == "7":
                 self.tool_login()
             elif choice == "0":
                 self.running = False
@@ -351,7 +493,7 @@ class PentestMenu:
                 print("\033[92m                         Stay safe. Stay legal.\033[0m")
                 print("\033[92m" + "=" * 78 + "\033[0m\n")
             else:
-                print("\n\033[91m✗ Invalid choice. Please select 0-4.\033[0m")
+                print("\n\033[91m✗ Invalid choice. Please select 0-7.\033[0m")
                 self.pause()
 
 
