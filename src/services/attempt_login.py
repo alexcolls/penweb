@@ -345,34 +345,101 @@ def attempt_credential_combinations(
 
 
 if __name__ == "__main__":
-    # Example usage
+    # CLI argument parsing
     import sys
+    import argparse
     
-    if len(sys.argv) < 2:
-        print("Usage: python cred.py <login_url>")
-        print("Example: python cred.py https://example.com/login")
+    parser = argparse.ArgumentParser(
+        description='Test login form security and rate limiting by attempting credential combinations.',
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog='''
+Examples:
+  # Basic usage with default test data
+  python attempt_login.py https://example.com/login
+  
+  # Custom emails and keywords
+  python attempt_login.py https://example.com/login -e admin@site.com user@site.com -k password admin
+  
+  # With custom delay and max attempts
+  python attempt_login.py https://example.com/login -e test@site.com -k password -d 0.5 -m 50
+  
+  # Quiet mode (minimal output)
+  python attempt_login.py https://example.com/login -e admin@site.com -k admin -q
+'''
+    )
+    
+    parser.add_argument('url', help='Login page URL (e.g., https://example.com/login)')
+    parser.add_argument(
+        '-e', '--emails',
+        nargs='+',
+        default=['admin@example.com', 'user@example.com', 'test@example.com'],
+        help='Email addresses to test (default: admin@example.com user@example.com test@example.com)'
+    )
+    parser.add_argument(
+        '-k', '--keywords',
+        nargs='+',
+        default=['password', 'admin', 'welcome'],
+        help='Keywords to generate password combinations (default: password admin welcome)'
+    )
+    parser.add_argument(
+        '-d', '--delay',
+        type=float,
+        default=1.0,
+        help='Delay between attempts in seconds (default: 1.0)'
+    )
+    parser.add_argument(
+        '-m', '--max-attempts',
+        type=int,
+        default=None,
+        help='Maximum number of login attempts (default: unlimited)'
+    )
+    parser.add_argument(
+        '-q', '--quiet',
+        action='store_true',
+        help='Quiet mode - only show summary (default: verbose)'
+    )
+    
+    # Parse arguments
+    args = parser.parse_args()
+    
+    # Validate URL
+    if not args.url.startswith(('http://', 'https://')):
+        print("\033[91m✗ Error: URL must start with http:// or https://\033[0m")
+        print(f"Received: {args.url}")
         sys.exit(1)
     
-    login_url = sys.argv[1]
+    # Validate inputs
+    if not args.emails:
+        print("\033[91m✗ Error: At least one email address is required\033[0m")
+        sys.exit(1)
     
-    # Example data
-    test_emails = [
-        "admin@example.com",
-        "user@example.com",
-        "test@example.com"
-    ]
+    if not args.keywords:
+        print("\033[91m✗ Error: At least one keyword is required\033[0m")
+        sys.exit(1)
     
-    test_keywords = [
-        "password",
-        "admin",
-        "welcome"
-    ]
+    if args.delay < 0:
+        print("\033[91m✗ Error: Delay must be non-negative\033[0m")
+        sys.exit(1)
     
+    if args.max_attempts is not None and args.max_attempts <= 0:
+        print("\033[91m✗ Error: Max attempts must be positive\033[0m")
+        sys.exit(1)
+    
+    # Run the credential testing
     result = attempt_credential_combinations(
-        url=login_url,
-        emails=test_emails,
-        keywords=test_keywords,
-        delay=1.0,
-        verbose=True
+        url=args.url,
+        emails=args.emails,
+        keywords=args.keywords,
+        delay=args.delay,
+        max_attempts=args.max_attempts,
+        verbose=not args.quiet
     )
+    
+    # Exit with appropriate code
+    if result.get('error_message'):
+        sys.exit(1)
+    elif result.get('blocked'):
+        sys.exit(2)  # Exit code 2 for blocked
+    else:
+        sys.exit(0)
 
