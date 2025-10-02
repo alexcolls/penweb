@@ -1,0 +1,9 @@
+[submodule "modules/gps-cli"]
+	path = modules/gps-cli
+	url = git@github.com:alexcolls/gps-cli.git
+[submodule "modules/vpn-cli"]
+	path = modules/vpn-cli
+	url = git@github.com:alexcolls/vpn-cli.git
+[submodule "modules/email-cli"]
+	path = modules/email-cli
+	url = git@github.com:alexcolls/email-cli.git
