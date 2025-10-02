@@ -17,6 +17,8 @@ This repository contains a unified collection of tools designed for security tes
 
 ### 🛠️ GPS CLI - Device Location Tracker (`modules/gps-cli/`)
 
+Source: [https://github.com/alexcolls/gps-cli]
+
 **NEW!** Multi-provider GPS tracking CLI that supports various tracking services.
 
 **🆓 FREE Default:** Uses Traccar demo server (`https://demo2.traccar.org`) with IP-based geolocation - **NO account or GPS hardware required!**
@@ -49,6 +51,8 @@ This repository contains a unified collection of tools designed for security tes
 
 ### 🔐 VPN CLI - Multi-Provider VPN Manager (`modules/vpn-cli/`)
 
+Source: [https://github.com/alexcolls/vpn-cli]
+
 **NEW!** Unified VPN management CLI supporting multiple VPN providers.
 
 **🆓 FREE Default:** Uses VPNGate public servers - **NO account or signup required!**
@@ -78,6 +82,8 @@ This repository contains a unified collection of tools designed for security tes
 - Testing from different geographic locations
 
 ### 📧 Email CLI - Temporary Email Manager (`modules/email-cli/`)
+
+Source: [https://github.com/alexcolls/email-cli]
 
 **NEW!** Temporary email address manager for privacy and testing.
 
