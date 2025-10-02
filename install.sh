@@ -355,6 +355,41 @@ install_poetry() {
     fi
 }
 
+install_git_submodules() {
+    print_status "progress" "Installing git submodules..."
+    log_message "Starting git submodules installation"
+    
+    git submodule update --init --recursive
+    print_status "success" "Git submodules installed successfully"
+    log_message "Git submodules installed successfully"
+    
+    # Setup configuration directories and copy .env.sample files
+    print_status "progress" "Setting up submodule configurations..."
+    
+    # GPS-CLI configuration
+    mkdir -p "$HOME/.config/gps-cli"
+    if [ -f "$SCRIPT_DIR/modules/gps-cli/.env.sample" ]; then
+        cp "$SCRIPT_DIR/modules/gps-cli/.env.sample" "$HOME/.config/gps-cli/.env.sample"
+        print_status "success" "GPS-CLI config template copied to ~/.config/gps-cli/"
+        log_message "GPS-CLI .env.sample copied"
+    fi
+    
+    # Email-CLI configuration
+    mkdir -p "$HOME/.config/tempmail"
+    if [ -f "$SCRIPT_DIR/modules/email-cli/.env.sample" ]; then
+        cp "$SCRIPT_DIR/modules/email-cli/.env.sample" "$HOME/.config/tempmail/.env.sample"
+        print_status "success" "Email-CLI config template copied to ~/.config/tempmail/"
+        log_message "Email-CLI .env.sample copied"
+    fi
+    
+    # VPN-CLI (uses JSON config, no .env.sample needed)
+    mkdir -p "$HOME/.config/vpn-cli"
+    print_status "success" "VPN-CLI config directory created at ~/.config/vpn-cli/"
+    log_message "VPN-CLI config directory created"
+    
+    print_status "info" "All submodules configured with FREE default settings"
+}
+
 # ============================================================================
 # Installation Functions
 # ============================================================================
@@ -663,6 +698,9 @@ main() {
             handle_error "Poetry is required to continue. Please install it from https://python-poetry.org/"
         fi
     fi
+    
+    # Install git submodules
+    install_git_submodules
     
     echo ""
     print_status "success" "All dependencies are satisfied"
