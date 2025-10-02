@@ -9,24 +9,29 @@ This repository contains a unified collection of tools designed for security tes
 - **4 Core Security Testing Utilities** (URL ping, website cloning, rate limit testing, login testing)
 - **AWS Lambda function** for serverless URL health checks
 
+**NEW in v0.3.1:** 🎉 **Zero-Config Free Defaults** - All CLI tools now work immediately after installation with FREE options requiring NO account or signup! GPS uses free Traccar demo server, VPN uses free VPNGate servers, Email uses free 1secmail API.
+
 **NEW in v0.3.0:** 🚀 **Expanded CLI with 7 Tools** - Three new defensive tools (GPS, VPN, Email) integrated via git submodules, plus reorganized menu with better tool categorization!
 
 ## Components
 
-### 🛰️ GPS CLI - Device Location Tracker (`modules/gps-cli/`)
+### 🛠️ GPS CLI - Device Location Tracker (`modules/gps-cli/`)
 
 **NEW!** Multi-provider GPS tracking CLI that supports various tracking services.
 
+**🆓 FREE Default:** Uses Traccar demo server (`https://demo2.traccar.org`) with IP-based geolocation - **NO account or GPS hardware required!**
+
 **Features:**
 - Multiple provider support: Traccar, OwnTracks, PhoneTrack, GPSLogger
-- IP-based geolocation fallback
+- IP-based geolocation fallback (city-level accuracy)
 - Real-time location tracking
-- GPS hardware detection
+- GPS hardware detection (optional)
 - Session management and history
 - Privacy-focused options
+- **Works immediately after installation - zero configuration!**
 
 **Providers:**
-- **Traccar**: Free demo server or self-hosted option
+- **Traccar**: Free demo server (DEFAULT) or self-hosted option
 - **OwnTracks**: Self-hosted MQTT/HTTP with encryption
 - **PhoneTrack**: Nextcloud-based tracking
 - **GPSLogger**: Custom HTTP endpoint support
@@ -46,13 +51,16 @@ This repository contains a unified collection of tools designed for security tes
 
 **NEW!** Unified VPN management CLI supporting multiple VPN providers.
 
+**🆓 FREE Default:** Uses VPNGate public servers - **NO account or signup required!**
+
 **Features:**
-- ProtonVPN integration (requires account)
-- Free VPN support via VPNGate (no account needed)
-- Multiple country selection
+- Free VPN support via VPNGate (no account needed) - **DEFAULT**
+- ProtonVPN integration (requires account for premium features)
+- Multiple country selection (US, UK, JP, DE, FR, CA, AU, NL, KR, etc.)
 - Connection history tracking
 - Public IP and geolocation display
 - Quick connect/disconnect
+- **Works immediately after installation - zero configuration!**
 
 **Usage:**
 ```bash
@@ -73,13 +81,18 @@ This repository contains a unified collection of tools designed for security tes
 
 **NEW!** Temporary email address manager for privacy and testing.
 
+**🆓 FREE Default:** Uses 1secmail.com API - **NO account or signup required!**
+
 **Features:**
-- Create temporary email addresses instantly
-- No registration required
+- Create temporary email addresses instantly - **completely FREE**
+- Receive emails immediately with no configuration
+- No registration or signup required
 - Multiple email management
 - Inbox checking and message reading
 - Custom or random email names
 - Email history tracking
+- **Optional:** SMTP configuration only needed for sending emails
+- **Works immediately after installation - zero configuration!**
 
 **Usage:**
 ```bash
@@ -236,6 +249,29 @@ penweb/
     └── test_lambda.py     # Lambda function tests
 ```
 
+## 🚀 Quick Start (Zero-Config!)
+
+**Get started in 3 commands - all tools work immediately with FREE defaults:**
+
+```bash
+# 1. Clone and enter the repository
+git clone https://github.com/alexcolls/penweb.git && cd penweb
+
+# 2. Initialize submodules and run automated installer
+git submodule update --init --recursive && ./install.sh
+
+# 3. Launch the CLI (select Development Mode during install)
+./run.sh
+```
+
+**That's it!** All 7 tools are ready to use:
+- 🛠️ **GPS**: Free Traccar demo server (no account, no GPS hardware)
+- 🔐 **VPN**: Free VPNGate servers (no account)
+- 📧 **Email**: Free 1secmail API (no account)
+- Plus 4 security testing utilities ready to go!
+
+---
+
 ## Setup
 
 ### 🚀 Automated Installation (Recommended)
@@ -257,10 +293,16 @@ git submodule update --init --recursive
 The installer will:
 - ✅ Detect your OS (Linux/macOS) and shell (bash/zsh)
 - ✅ Install all required dependencies (Python 3.9+, Poetry, etc.)
+- ✅ Initialize and configure git submodules (GPS, VPN, Email)
+- ✅ **Automatically copy configuration templates to `~/.config/`**
+  - GPS-CLI: `~/.config/gps-cli/.env.sample`
+  - Email-CLI: `~/.config/tempmail/.env.sample`
+  - VPN-CLI: `~/.config/vpn-cli/` (auto-generated on first run)
 - ✅ Offer two installation modes:
   - **Development Mode**: Install in current directory with `.venv` for development
   - **User/System Mode**: Install to `~/.local/share/penweb` with system-wide `penweb` command
 - ✅ Configure environment files automatically
+- ✅ **All tools work immediately with FREE defaults - zero manual config!**
 - ✅ Works on virgin Linux and macOS machines
 
 **Installation Modes:**

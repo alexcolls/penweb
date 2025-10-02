@@ -7,6 +7,51 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.1] - 2025-10-02
+
+### Added
+- **Automatic Configuration Setup**
+  - Install script now automatically copies `.env.sample` files from submodules to user config directories
+  - Creates `~/.config/gps-cli/` directory and copies GPS-CLI configuration template
+  - Creates `~/.config/tempmail/` directory and copies Email-CLI configuration template
+  - Creates `~/.config/vpn-cli/` directory for VPN-CLI auto-generated config
+  - Added status messages during installation for successful configuration setup
+
+### Changed
+- **FREE Default Configuration Documentation**
+  - Updated main `.env.sample` with comprehensive submodule configuration section
+  - Added clear documentation that all CLI tools work with FREE defaults requiring NO account
+  - Documented GPS-CLI uses free Traccar demo server (no account needed)
+  - Documented VPN-CLI uses free VPNGate servers (no account needed)
+  - Documented Email-CLI uses free 1secmail.com API (no account needed)
+  - Included config file locations and quick setup instructions for each tool
+  - Added emoji icons for better visual organization
+
+- **GPS-CLI Configuration**
+  - Default provider set to Traccar demo server (`https://demo2.traccar.org`)
+  - Default GPS source set to `ip` for IP-based geolocation (no hardware required)
+  - Enhanced `.env.sample` with prominent FREE configuration header
+  - Added clear comments explaining no account or signup required
+
+- **Email-CLI Configuration**
+  - Enhanced `.env.sample` with prominent "RECEIVING IS FREE" header
+  - Clarified that SMTP configuration is ONLY needed for sending emails (optional)
+  - Emphasized that receiving temporary emails requires NO configuration
+  - Tool works out of the box for creating and checking temporary emails
+
+- **VPN-CLI Configuration**
+  - Confirmed free VPNGate as default provider (no changes needed)
+  - Uses JSON-based config at `~/.config/vpn-cli/config.json` (auto-created)
+  - Works immediately after installation with no manual setup
+
+### Improved
+- **User Experience**
+  - All three CLI tools (GPS, VPN, Email) now work immediately after installation
+  - Zero manual configuration required for basic usage
+  - Configuration files automatically copied to proper user directories
+  - Clear documentation guides users to free options
+  - Installation process more streamlined and user-friendly
+
 ## [0.3.0] - 2025-10-02
 
 ### Added
@@ -182,6 +227,16 @@ penweb/
 
 ## Release Notes
 
+### Version 0.3.1 Highlights
+This patch release focuses on **automatic configuration** and **free defaults**:
+- All CLI tools (GPS, VPN, Email) now work immediately after installation with ZERO manual setup
+- Install script automatically copies configuration templates to user directories
+- Comprehensive documentation of FREE options requiring no account/signup
+- GPS-CLI defaults to free Traccar demo server with IP-based geolocation
+- Email-CLI clearly documents that receiving emails is completely free (SMTP only for sending)
+- Enhanced `.env.sample` with detailed submodule configuration guide
+- Improved user experience with streamlined setup process
+
 ### Version 0.3.0 Highlights
 This release focuses on **tool expansion** and **git submodule integration**:
 - Three new CLI tools integrated via git submodules: GPS, VPN, and Email
@@ -209,6 +264,29 @@ The initial feature release includes:
 ---
 
 ## Upgrade Guide
+
+### From 0.3.0 to 0.3.1
+
+**For All Users:**
+```bash
+# Pull the latest changes
+git pull origin main
+
+# Update submodules to get latest .env.sample files
+git submodule update --remote
+
+# Optionally re-run installation to copy updated configs
+./install.sh  # Select your preferred mode
+```
+
+**What's New:**
+- Configuration files are now automatically copied during installation
+- Check `~/.config/gps-cli/.env.sample` for GPS-CLI configuration template
+- Check `~/.config/tempmail/.env.sample` for Email-CLI configuration template
+- All tools now work with FREE defaults - no account/signup needed!
+- Enhanced documentation in `.env.sample` explaining free options
+
+**Note:** If you already completed the setup for GPS, VPN, or Email tools, you don't need to do anything. This update primarily improves the first-time setup experience.
 
 ### From 0.2.0 to 0.3.0
 
