@@ -106,7 +106,7 @@ class PentestMenu:
         """Execute the GPS CLI tool from git submodule."""
         clear_screen()
         print("\n" + "=" * 78)
-        print("                     🛰️  GPS CLI - Device Location Tracker")
+        print("                     🛰️   CLI - Device Location Tracker")
         print("=" * 78)
         print("\n\033[96mLaunching GPS CLI...\033[0m\n")
         
