@@ -7,6 +7,46 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2025-10-02
+
+### Added
+- **Git Submodule Integration**
+  - Added `gps-cli` as git submodule for device location tracking
+  - Added `vpn-cli` as git submodule for multi-provider VPN management
+  - Added `email-cli` as git submodule for temporary email management
+  - New `modules/` directory containing all CLI submodules
+  - Integrated submodule CLIs into main menu as options 1, 2, and 3
+
+- **Enhanced CLI Menu**
+  - Expanded main menu from 4 to 7 tool options
+  - Added GPS CLI tool (Option 1) - Device location tracker with multi-provider support
+  - Added VPN CLI tool (Option 2) - Multi-provider VPN manager (ProtonVPN, Free VPN)
+  - Added Email CLI tool (Option 3) - Temporary email address manager
+  - Reorganized existing tools: Ping (4), Clone (5), DDoS (6), Login (7)
+  - Added DEFENSIVE labels to GPS and VPN tools for clarity
+  - Updated menu navigation to support 0-7 options
+
+### Changed
+- **Menu Structure**
+  - Reordered tools with defensive tools (GPS, VPN, Email) listed first
+  - Offensive tools (DDoS, Login) moved to end of menu
+  - Updated color coding: Cyan for defensive tools, Green for utilities, Red for offensive
+  - Improved menu descriptions for better clarity
+
+- **Code Organization**
+  - Added `subprocess` module import for external CLI execution
+  - Implemented subprocess-based tool launchers for submodule CLIs
+  - Enhanced error handling for missing submodules with helpful instructions
+  - Added proper logging for submodule CLI launches and exits
+
+### Technical Details
+- Git submodules reference GitHub repositories:
+  - `git@github.com:alexcolls/gps-cli.git`
+  - `git@github.com:alexcolls/vpn-cli.git`
+  - `git@github.com:alexcolls/email-cli.git`
+- Submodules are executed in their respective directories with full interactivity
+- Each tool includes validation to ensure submodules are initialized
+
 ## [0.2.0] - 2025-10-01
 
 ### Added
@@ -142,6 +182,14 @@ penweb/
 
 ## Release Notes
 
+### Version 0.3.0 Highlights
+This release focuses on **tool expansion** and **git submodule integration**:
+- Three new CLI tools integrated via git submodules: GPS, VPN, and Email
+- Expanded menu from 4 to 7 total tools
+- Better organization with defensive tools listed first
+- Seamless integration with external CLI tools through submodules
+- Enhanced menu navigation and user experience
+
 ### Version 0.2.0 Highlights
 This release focuses on **ease of installation** and **professional branding**:
 - One-command installation with `./install.sh` that works on any Linux or macOS system
@@ -161,6 +209,33 @@ The initial feature release includes:
 ---
 
 ## Upgrade Guide
+
+### From 0.2.0 to 0.3.0
+
+**For All Users:**
+```bash
+# Pull the latest changes
+git pull origin main
+
+# Initialize and update git submodules
+git submodule update --init --recursive
+
+# Continue using the CLI as normal
+./run.sh
+```
+
+**New Features to Try:**
+- Option 1: GPS CLI - Track device location using multiple providers (Traccar, OwnTracks, etc.)
+- Option 2: VPN CLI - Manage VPN connections (ProtonVPN, Free VPN)
+- Option 3: Email CLI - Create and manage temporary email addresses
+- All tools are now better organized with defensive tools first
+
+**Breaking Changes:**
+- Menu option numbers have changed:
+  - Ping: 1 → 4
+  - Clone: 2 → 5
+  - DDoS: 3 → 6
+  - Login: 4 → 7
 
 ### From 0.1.0 to 0.2.0
 
@@ -211,7 +286,8 @@ When contributing to this project, please:
 - [Issue Tracker](https://github.com/yourusername/penweb/issues)
 - [Documentation](./docs/)
 
-[Unreleased]: https://github.com/yourusername/penweb/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/yourusername/penweb/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/yourusername/penweb/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/yourusername/penweb/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/yourusername/penweb/compare/v0.0.1...v0.1.0
 [0.0.1]: https://github.com/yourusername/penweb/releases/tag/v0.0.1

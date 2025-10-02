@@ -1,14 +1,97 @@
 # Penweb CLI
 
-A collection of security testing utilities and AWS Lambda functions for URL monitoring and rate limit testing.
+A comprehensive security testing toolkit with integrated CLI utilities for penetration testing, privacy tools, and AWS Lambda functions for URL monitoring.
 
 ## Overview
 
-This repository contains tools designed for security testing, penetration testing, and monitoring. It includes an AWS Lambda function for URL health checks and utilities for testing rate limiting and authentication mechanisms.
+This repository contains a unified collection of tools designed for security testing, penetration testing, privacy protection, and monitoring. It includes:
+- **3 Integrated CLI Tools** (GPS tracking, VPN management, temporary email)
+- **4 Core Security Testing Utilities** (URL ping, website cloning, rate limit testing, login testing)
+- **AWS Lambda function** for serverless URL health checks
 
-**NEW:** 🎨 **Interactive CLI** - Run all tools through a beautiful, user-friendly command-line interface with ASCII art and interactive menus!
+**NEW in v0.3.0:** 🚀 **Expanded CLI with 7 Tools** - Three new defensive tools (GPS, VPN, Email) integrated via git submodules, plus reorganized menu with better tool categorization!
 
 ## Components
+
+### 🛰️ GPS CLI - Device Location Tracker (`modules/gps-cli/`)
+
+**NEW!** Multi-provider GPS tracking CLI that supports various tracking services.
+
+**Features:**
+- Multiple provider support: Traccar, OwnTracks, PhoneTrack, GPSLogger
+- IP-based geolocation fallback
+- Real-time location tracking
+- GPS hardware detection
+- Session management and history
+- Privacy-focused options
+
+**Providers:**
+- **Traccar**: Free demo server or self-hosted option
+- **OwnTracks**: Self-hosted MQTT/HTTP with encryption
+- **PhoneTrack**: Nextcloud-based tracking
+- **GPSLogger**: Custom HTTP endpoint support
+
+**Usage:**
+```bash
+./run.sh  # Then select option 1 - GPS
+```
+
+**Use Cases:**
+- Device location tracking and monitoring
+- Fleet management
+- Personal location history
+- Emergency location services
+
+### 🔐 VPN CLI - Multi-Provider VPN Manager (`modules/vpn-cli/`)
+
+**NEW!** Unified VPN management CLI supporting multiple VPN providers.
+
+**Features:**
+- ProtonVPN integration (requires account)
+- Free VPN support via VPNGate (no account needed)
+- Multiple country selection
+- Connection history tracking
+- Public IP and geolocation display
+- Quick connect/disconnect
+
+**Usage:**
+```bash
+./run.sh  # Then select option 2 - VPN
+```
+
+**Providers:**
+- **ProtonVPN**: Secure, trusted VPN (free tier: 3 countries)
+- **Free VPN**: Completely free via VPNGate public servers
+
+**Use Cases:**
+- Privacy protection and anonymity
+- Geo-restriction bypass
+- Secure public WiFi usage
+- Testing from different geographic locations
+
+### 📧 Email CLI - Temporary Email Manager (`modules/email-cli/`)
+
+**NEW!** Temporary email address manager for privacy and testing.
+
+**Features:**
+- Create temporary email addresses instantly
+- No registration required
+- Multiple email management
+- Inbox checking and message reading
+- Custom or random email names
+- Email history tracking
+
+**Usage:**
+```bash
+./run.sh  # Then select option 3 - Email
+```
+
+**Use Cases:**
+- Privacy protection for online registrations
+- Testing email workflows
+- Avoiding spam
+- Temporary communications
+- Security testing of email systems
 
 ### 📡 AWS Lambda - URL Pinger (`src/lambda/`)
 
@@ -40,7 +123,7 @@ Tests login form security and rate limiting by attempting credential combination
 **Usage:**
 ```bash
 # Via CLI (Recommended)
-./run.sh  # Then select option 4
+./run.sh  # Then select option 7 - Login
 
 # Or directly
 poetry run python src/services/attempt_login.py https://example.com/login
@@ -67,7 +150,7 @@ Tests API and web endpoint rate limiting by making repeated requests.
 **Usage:**
 ```bash
 # Via CLI (Recommended)
-./run.sh  # Then select option 3
+./run.sh  # Then select option 6 - DDoS
 
 # Or directly
 poetry run python src/services/d2.py https://api.example.com 0.5
@@ -104,7 +187,7 @@ Downloads website HTML, CSS, and JavaScript files for offline analysis.
 **Usage:**
 ```bash
 # Via CLI (Recommended)
-./run.sh  # Then select option 2
+./run.sh  # Then select option 5 - Clone
 
 # Or directly
 poetry run python src/services/clone.py https://example.com output_dir
@@ -120,17 +203,23 @@ penweb/
 ├── poetry.lock             # Locked dependency versions
 ├── poetry.toml             # Local Poetry settings
 ├── README.md               # This file
+├── CHANGELOG.md           # Version history and release notes
 ├── LICENSE                # License information
 ├── .env                   # Environment variables (not tracked)
 ├── .env.sample            # Environment variable template
+├── .gitmodules            # Git submodule configuration
 ├── docs/
 │   ├── SETUP.md           # Detailed setup instructions
 │   ├── CLI_USAGE.md       # Interactive CLI usage guide
 │   └── LOGGING.md         # Logging system documentation
+├── modules/               # Git submodules for external CLI tools
+│   ├── gps-cli/           # GPS tracking CLI (submodule)
+│   ├── vpn-cli/           # VPN management CLI (submodule)
+│   └── email-cli/         # Temporary email CLI (submodule)
 ├── src/
 │   ├── cli/               # Interactive CLI interface
 │   │   ├── banner.py      # ASCII art and branding
-│   │   └── menu.py        # Interactive menu system
+│   │   └── menu.py        # Interactive menu system (7 tools)
 │   ├── lambda/
 │   │   ├── entrypoint.py  # AWS Lambda handler
 │   │   └── README.md      # Lambda documentation
@@ -154,6 +243,13 @@ penweb/
 The easiest way to get started is using our automated installer that handles all dependencies:
 
 ```bash
+# Clone the repository
+git clone https://github.com/alexcolls/penweb.git
+cd penweb
+
+# Initialize git submodules (REQUIRED for GPS, VPN, Email tools)
+git submodule update --init --recursive
+
 # Run the installer
 ./install.sh
 ```
@@ -188,6 +284,13 @@ See [`docs/SETUP.md`](docs/SETUP.md) for detailed manual setup instructions.
 **Quick Start (Manual):**
 
 ```bash
+# Clone the repository
+git clone https://github.com/alexcolls/penweb.git
+cd penweb
+
+# Initialize git submodules (REQUIRED)
+git submodule update --init --recursive
+
 # Install Poetry if not already installed
 curl -sSL https://install.python-poetry.org | python3 -
 
@@ -211,13 +314,24 @@ The easiest way to use PenWeb is through the **interactive CLI**:
 ./run.sh
 ```
 
+**Menu Options:**
+- **[1] 🛰️ GPS (DEFENSIVE)** - Device location tracker with multi-provider support
+- **[2] 🔐 VPN (DEFENSIVE)** - Multi-provider VPN manager (ProtonVPN, Free VPN)
+- **[3] 📧 Email** - Temporary email address manager
+- **[4] 🌐 Ping** - Test URL availability and response time
+- **[5] 📋 Clone** - Download website HTML, CSS, and JS files
+- **[6] 💥 DDoS (OFFENSIVE)** - Test rate limiting with repeated requests
+- **[7] 🔐 Login (OFFENSIVE)** - Test login security with credentials
+- **[0] 🚪 Exit** - Quit the application
+
 Features:
 - 🎨 Beautiful ASCII art banner
-- 📋 Interactive menu system
+- 📋 Interactive menu with 7 integrated tools
 - ⚖️ Built-in legal warnings and authorization checks
 - 🎯 Guided workflows for each tool
-- 🔴 Clear marking of offensive tools
-- ⌨️ Graceful error handling
+- 🔵 Defensive tools (GPS, VPN, Email) listed first
+- 🔴 Clear marking of offensive tools (DDoS, Login)
+- ⌨️ Graceful error handling and keyboard interrupt support
 
 See [`docs/CLI_USAGE.md`](docs/CLI_USAGE.md) for detailed usage guide.
 
@@ -293,11 +407,18 @@ See [`src/lambda/README.md`](src/lambda/README.md) for complete deployment instr
 
 ## Use Cases
 
+### Privacy & Security Tools
+- **GPS Tracking**: Device location monitoring and fleet management
+- **VPN Management**: Privacy protection, geo-restriction bypass, secure browsing
+- **Temporary Email**: Privacy protection, testing, spam avoidance
+
+### Security Testing
 - **DevOps**: Monitor website availability and response times
 - **Security Testing**: Test rate limiting and authentication mechanisms
-- **Penetration Testing**: Validate security controls
+- **Penetration Testing**: Validate security controls and identify vulnerabilities
 - **Compliance**: Verify security requirements are met
 - **Quality Assurance**: Automated endpoint testing
+- **Web Application Testing**: Clone and analyze website structure
 
 ## Contributing
 
