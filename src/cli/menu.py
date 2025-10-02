@@ -490,7 +490,7 @@ class PentestMenu:
                 clear_screen()
                 print("\n\033[92m" + "=" * 78 + "\033[0m")
                 print("\033[92m                    Thank you for using PenWeb!\033[0m")
-                print("\033[92m                         Stay safe. Stay legal.\033[0m")
+                print("\033[92m                      🛡️🔐 Stay safe. Stay legal.\033[0m")
                 print("\033[92m" + "=" * 78 + "\033[0m\n")
             else:
                 print("\n\033[91m✗ Invalid choice. Please select 0-7.\033[0m")

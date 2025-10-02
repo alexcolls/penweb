@@ -5,6 +5,7 @@ A comprehensive security testing toolkit with integrated CLI utilities for penet
 ## Overview
 
 This repository contains a unified collection of tools designed for security testing, penetration testing, privacy protection, and monitoring. It includes:
+
 - **3 Integrated CLI Tools** (GPS tracking, VPN management, temporary email)
 - **4 Core Security Testing Utilities** (URL ping, website cloning, rate limit testing, login testing)
 - **AWS Lambda function** for serverless URL health checks
@@ -24,6 +25,7 @@ Source: [https://github.com/alexcolls/gps-cli]
 **🆓 FREE Default:** Uses Traccar demo server (`https://demo2.traccar.org`) with IP-based geolocation - **NO account or GPS hardware required!**
 
 **Features:**
+
 - Multiple provider support: Traccar, OwnTracks, PhoneTrack, GPSLogger
 - IP-based geolocation fallback (city-level accuracy)
 - Real-time location tracking
@@ -33,17 +35,20 @@ Source: [https://github.com/alexcolls/gps-cli]
 - **Works immediately after installation - zero configuration!**
 
 **Providers:**
+
 - **Traccar**: Free demo server (DEFAULT) or self-hosted option
 - **OwnTracks**: Self-hosted MQTT/HTTP with encryption
 - **PhoneTrack**: Nextcloud-based tracking
 - **GPSLogger**: Custom HTTP endpoint support
 
 **Usage:**
+
 ```bash
 ./run.sh  # Then select option 1 - GPS
 ```
 
 **Use Cases:**
+
 - Device location tracking and monitoring
 - Fleet management
 - Personal location history
@@ -58,6 +63,7 @@ Source: [https://github.com/alexcolls/vpn-cli]
 **🆓 FREE Default:** Uses VPNGate public servers - **NO account or signup required!**
 
 **Features:**
+
 - Free VPN support via VPNGate (no account needed) - **DEFAULT**
 - ProtonVPN integration (requires account for premium features)
 - Multiple country selection (US, UK, JP, DE, FR, CA, AU, NL, KR, etc.)
@@ -67,15 +73,18 @@ Source: [https://github.com/alexcolls/vpn-cli]
 - **Works immediately after installation - zero configuration!**
 
 **Usage:**
+
 ```bash
 ./run.sh  # Then select option 2 - VPN
 ```
 
 **Providers:**
+
 - **ProtonVPN**: Secure, trusted VPN (free tier: 3 countries)
 - **Free VPN**: Completely free via VPNGate public servers
 
 **Use Cases:**
+
 - Privacy protection and anonymity
 - Geo-restriction bypass
 - Secure public WiFi usage
@@ -90,6 +99,7 @@ Source: [https://github.com/alexcolls/email-cli]
 **🆓 FREE Default:** Uses 1secmail.com API - **NO account or signup required!**
 
 **Features:**
+
 - Create temporary email addresses instantly - **completely FREE**
 - Receive emails immediately with no configuration
 - No registration or signup required
@@ -101,11 +111,13 @@ Source: [https://github.com/alexcolls/email-cli]
 - **Works immediately after installation - zero configuration!**
 
 **Usage:**
+
 ```bash
 ./run.sh  # Then select option 3 - Email
 ```
 
 **Use Cases:**
+
 - Privacy protection for online registrations
 - Testing email workflows
 - Avoiding spam
@@ -117,13 +129,14 @@ Source: [https://github.com/alexcolls/email-cli]
 AWS Lambda function that processes SQS messages containing URLs and pings them via HTTP requests. Perfect for monitoring website availability and response times.
 
 **Features:**
+
 - Processes SQS events with batch support
 - Supports plain URL strings or JSON formatted messages
 - Returns detailed results with status codes and response times
 - Comprehensive error handling and logging
 - No external dependencies (uses Python standard library only)
 
-See [`src/lambda/README.md`](src/lambda/README.md) for detailed documentation and deployment instructions.
+See [`docs/LAMBDA.md`](docs/LAMBDA.md) for detailed documentation and deployment instructions.
 
 ### 🔧 Security Testing Utilities (`src/services/`)
 
@@ -132,6 +145,7 @@ See [`src/lambda/README.md`](src/lambda/README.md) for detailed documentation an
 Tests login form security and rate limiting by attempting credential combinations.
 
 **Features:**
+
 - Automatic form field detection (email/username and password fields)
 - Password variation generation from keywords
 - Rate limiting detection
@@ -140,6 +154,7 @@ Tests login form security and rate limiting by attempting credential combination
 - Detailed reporting of successful/blocked attempts
 
 **Usage:**
+
 ```bash
 # Via CLI (Recommended)
 ./run.sh  # Then select option 7 - Login
@@ -149,6 +164,7 @@ poetry run python src/services/attempt_login.py https://example.com/login
 ```
 
 **Use Cases:**
+
 - Testing login rate limiting effectiveness
 - Verifying security mechanisms (CAPTCHA, account lockout)
 - Penetration testing authorization flows
@@ -159,6 +175,7 @@ poetry run python src/services/attempt_login.py https://example.com/login
 Tests API and web endpoint rate limiting by making repeated requests.
 
 **Features:**
+
 - Configurable request intervals
 - User-Agent randomization
 - Query parameter randomization
@@ -167,6 +184,7 @@ Tests API and web endpoint rate limiting by making repeated requests.
 - Connection error handling
 
 **Usage:**
+
 ```bash
 # Via CLI (Recommended)
 ./run.sh  # Then select option 6 - DDoS
@@ -176,6 +194,7 @@ poetry run python src/services/d2.py https://api.example.com 0.5
 ```
 
 **Use Cases:**
+
 - Testing rate limiting configurations
 - API endpoint stress testing
 - WAF (Web Application Firewall) validation
@@ -186,6 +205,7 @@ poetry run python src/services/d2.py https://api.example.com 0.5
 Core utility for making HTTP requests and measuring response times.
 
 **Features:**
+
 - HTTP/HTTPS support
 - Configurable timeout
 - Response time measurement
@@ -197,6 +217,7 @@ Core utility for making HTTP requests and measuring response times.
 Downloads website HTML, CSS, and JavaScript files for offline analysis.
 
 **Features:**
+
 - Downloads HTML, CSS, and JS files
 - Preserves relative links
 - Extracts inline styles and scripts
@@ -204,6 +225,7 @@ Downloads website HTML, CSS, and JavaScript files for offline analysis.
 - BeautifulSoup HTML parsing
 
 **Usage:**
+
 ```bash
 # Via CLI (Recommended)
 ./run.sh  # Then select option 5 - Clone
@@ -271,6 +293,7 @@ git submodule update --init --recursive && ./install.sh
 ```
 
 **That's it!** All 7 tools are ready to use:
+
 - 🛠️ **GPS**: Free Traccar demo server (no account, no GPS hardware)
 - 🔐 **VPN**: Free VPNGate servers (no account)
 - 📧 **Email**: Free 1secmail API (no account)
@@ -297,6 +320,7 @@ git submodule update --init --recursive
 ```
 
 The installer will:
+
 - ✅ Detect your OS (Linux/macOS) and shell (bash/zsh)
 - ✅ Install all required dependencies (Python 3.9+, Poetry, etc.)
 - ✅ Initialize and configure git submodules (GPS, VPN, Email)
@@ -314,12 +338,14 @@ The installer will:
 **Installation Modes:**
 
 1. **Development Mode** - For contributors and developers:
+
    ```bash
    ./install.sh  # Select option 1
    ./run.sh      # Run the application
    ```
 
 2. **User/System Mode** - For end-users:
+
    ```bash
    ./install.sh  # Select option 2
    penweb        # Run from anywhere (after restarting terminal)
@@ -363,6 +389,7 @@ The easiest way to use PenWeb is through the **interactive CLI**:
 ```
 
 **Menu Options:**
+
 - **[1] 🛰️ GPS (DEFENSIVE)** - Device location tracker with multi-provider support
 - **[2] 🔐 VPN (DEFENSIVE)** - Multi-provider VPN manager (ProtonVPN, Free VPN)
 - **[3] 📧 Email** - Temporary email address manager
@@ -373,6 +400,7 @@ The easiest way to use PenWeb is through the **interactive CLI**:
 - **[0] 🚪 Exit** - Quit the application
 
 Features:
+
 - 🎨 Beautiful ASCII art banner
 - 📋 Interactive menu with 7 integrated tools
 - ⚖️ Built-in legal warnings and authorization checks
@@ -386,11 +414,13 @@ See [`docs/CLI_USAGE.md`](docs/CLI_USAGE.md) for detailed usage guide.
 ## Dependencies
 
 **Runtime:**
+
 - `python` ^3.9
 - `requests` ^2.31.0 - HTTP library for utilities
 - `beautifulsoup4` ^4.12.0 - HTML parsing for form detection
 
 **Development:**
+
 - `pytest` ^7.4.0 - Testing framework
 - `pytest-cov` ^4.1.0 - Coverage reporting
 - `black` ^23.7.0 - Code formatting
@@ -410,21 +440,25 @@ See [`docs/CLI_USAGE.md`](docs/CLI_USAGE.md) for detailed usage guide.
 This project uses Poetry for dependency management.
 
 **Format code:**
+
 ```bash
 poetry run black src/
 ```
 
 **Lint code:**
+
 ```bash
 poetry run flake8 src/
 ```
 
 **Type check:**
+
 ```bash
 poetry run mypy src/
 ```
 
 **Run tests:**
+
 ```bash
 poetry run pytest test/
 ```
@@ -447,20 +481,68 @@ Unauthorized access to computer systems is illegal. The authors and contributors
 ## AWS Lambda Deployment
 
 The URL Pinger Lambda function can be deployed using:
+
 - AWS Console (manual upload)
 - AWS CLI
 - Infrastructure as Code (Terraform, CloudFormation, AWS SAM)
 
-See [`src/lambda/README.md`](src/lambda/README.md) for complete deployment instructions.
+See [`docs/LAMBDA.md`](docs/LAMBDA.md) for complete deployment instructions.
+
+### Container Image (Docker) Deployment
+
+Build a Lambda-compatible container image using the included `Dockerfile` and test locally with the Lambda Runtime Interface Emulator built into the base image.
+
+```bash
+# From repo root
+docker build -t penweb-lambda .
+
+# Run locally (exposes Lambda RIE on port 9000)
+docker run --rm -p 9000:8080 penweb-lambda
+
+# Invoke locally
+curl -s -XPOST "http://localhost:9000/2015-03-31/functions/function/invocations" \
+  -d '{"Records":[{"messageId":"1","body":"{\"url\":\"https://example.com\",\"action\":\"ping\"}"}]}'
+```
+
+Deploy the image to AWS Lambda via ECR:
+
+```bash
+ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
+REGION=$(aws configure get region)
+REPO=penweb-lambda
+
+# Create ECR repo (once)
+aws ecr create-repository --repository-name $REPO || true
+
+# Authenticate Docker to ECR
+aws ecr get-login-password --region $REGION | \
+  docker login --username AWS --password-stdin $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com
+
+# Tag and push
+docker tag penweb-lambda:latest $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPO:latest
+docker push $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPO:latest
+
+# Create or update Lambda (container image)
+aws lambda create-function \
+  --function-name penweb-url-pinger \
+  --package-type Image \
+  --code ImageUri=$ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPO:latest \
+  --role arn:aws:iam::$ACCOUNT_ID:role/YOUR_LAMBDA_ROLE || \
+aws lambda update-function-code \
+  --function-name penweb-url-pinger \
+  --image-uri $ACCOUNT_ID.dkr.ecr.$REGION.amazonaws.com/$REPO:latest
+```
 
 ## Use Cases
 
 ### Privacy & Security Tools
+
 - **GPS Tracking**: Device location monitoring and fleet management
 - **VPN Management**: Privacy protection, geo-restriction bypass, secure browsing
 - **Temporary Email**: Privacy protection, testing, spam avoidance
 
 ### Security Testing
+
 - **DevOps**: Monitor website availability and response times
 - **Security Testing**: Test rate limiting and authentication mechanisms
 - **Penetration Testing**: Validate security controls and identify vulnerabilities
@@ -471,6 +553,7 @@ See [`src/lambda/README.md`](src/lambda/README.md) for complete deployment instr
 ## Contributing
 
 Contributions are welcome! Please ensure:
+
 1. All tests pass
 2. Code is formatted with `black`
 3. No linting errors from `flake8`
