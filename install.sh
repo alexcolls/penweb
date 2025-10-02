@@ -486,6 +486,7 @@ install_user_mode() {
     # Copy project files
     print_status "progress" "Copying project files..."
     cp -r "$SCRIPT_DIR/src" "$INSTALL_DIR/"
+    cp -r "$SCRIPT_DIR/modules" "$INSTALL_DIR/"
     cp "$SCRIPT_DIR/pyproject.toml" "$INSTALL_DIR/"
     cp "$SCRIPT_DIR/poetry.lock" "$INSTALL_DIR/"
     cp "$SCRIPT_DIR/poetry.toml" "$INSTALL_DIR/"
@@ -494,8 +495,8 @@ install_user_mode() {
         cp "$SCRIPT_DIR/.env.sample" "$INSTALL_DIR/"
     fi
     
-    print_status "success" "Project files copied"
-    log_message "Project files copied to installation directory"
+    print_status "success" "Project files copied (including modules)"
+    log_message "Project files and modules copied to installation directory"
     
     # Install dependencies in the new location
     print_status "progress" "Installing dependencies in $INSTALL_DIR..."
